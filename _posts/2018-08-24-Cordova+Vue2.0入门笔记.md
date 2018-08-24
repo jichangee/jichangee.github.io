@@ -1,3 +1,17 @@
+---
+layout:     post   				    # 使用的布局（不需要改）
+title:      Cordova+Vue2.0入门笔记 				# 标题 
+# subtitle:   Hello World, Hello Blog #副标题
+date:       2018-08-24 				# 时间
+author:     薛纪昌 						# 作者
+# header-img: img/post-bg-2015.jpg 	#这篇文章标题背景图片
+catalog: true 						# 是否归档
+tags:								#标签
+    - vue
+    - cordova
+    - javascript
+---
+
 最近要用cordova+vue开发，在网上找了下两者整合的资料，有很多前辈已经有了教程，所以借鉴过来并且整理一下，加上自己爬的一些坑。
 
 如果还没安装Cordova的，请先安装

@@ -7,7 +7,7 @@ author:     薛纪昌 						# 作者
 # header-img: img/post-bg-2015.jpg 	#这篇文章标题背景图片
 catalog: true 						# 是否归档
 tags:								#标签
-    - JavaScript
+    - javascript
 ---
 
 Array.prototype.map()如果你使用了一段时间的JavaScript，你可能会遇到两个比较相似的数组方法：`Array.prototype.map()` 和 `Array.prototype.forEach()`。

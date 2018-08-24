@@ -1,3 +1,16 @@
+---
+layout:     post   				    # 使用的布局（不需要改）
+title:      在centos中使用Jenkins+Gitlab实现自动部署 				# 标题 
+# subtitle:   Hello World, Hello Blog #副标题
+date:       2018-08-24 				# 时间
+author:     薛纪昌 						# 作者
+# header-img: img/post-bg-2015.jpg 	#这篇文章标题背景图片
+catalog: true 						# 是否归档
+tags:								#标签
+    - centos
+    - jenkins
+---
+
 经过一天的摸索与尝试，参考了网上大部分的教程，终于把基本功能搞定了。在Google搜索了很多关键字，都没有找到一篇完整的面向初学者的教程（可能是本人的疏忽），所以借此来记录一下自动部署的流程与踩到的坑。
 
 ### 安装

@@ -1,3 +1,16 @@
+---
+layout:     post   				    # 使用的布局（不需要改）
+title:      express 开启 https服务器遇到的问题 				# 标题 
+# subtitle:   Hello World, Hello Blog #副标题
+date:       2018-08-24 				# 时间
+author:     薛纪昌 						# 作者
+# header-img: img/post-bg-2015.jpg 	#这篇文章标题背景图片
+catalog: true 						# 是否归档
+tags:								#标签
+    - express
+    - nginx
+---
+
 用express写的api服务器，放到CentOS上后出现了问题。具体如下
 
 sudo node index.js 开启监听后，浏览器访问https，会自动断开，而访问http的则可以。

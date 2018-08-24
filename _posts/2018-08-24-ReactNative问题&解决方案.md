@@ -1,3 +1,16 @@
+---
+layout:     post   				    # 使用的布局（不需要改）
+title:      ReactNative问题&解决方案 				# 标题 
+# subtitle:   Hello World, Hello Blog #副标题
+date:       2018-08-24 				# 时间
+author:     薛纪昌 						# 作者
+# header-img: img/post-bg-2015.jpg 	#这篇文章标题背景图片
+catalog: true 						# 是否归档
+tags:								#标签
+    - reactnative
+    - javascript
+---
+
 ## 调试
 ### Android 
 将手机连接至电脑，并且开启USB调试功能，然后在shell中输入
