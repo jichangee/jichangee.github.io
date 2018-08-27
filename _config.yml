@@ -11,7 +11,7 @@ github_repo: "https://github.com/jichangee/jichangee.github.io.git" # you code r
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "Goals determine what you going to be!"
+sidebar-about-description: "逆流而上"
 sidebar-avatar: /img/about-me-gentle.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
@@ -65,8 +65,8 @@ gitalk:
   clientID: 02884ac803aa950dc407                            #生成的clientID
   clientSecret: bb44d7f83924d1cf7cab3a4e930eb269269fc407    #生成的clientSecret
   repo: jichangee.github.io    #仓库名称
-  owner: jichangee    #github用户名
-  admin: jichangee
+  owner: jichangee@gmail.com    #github用户名
+  admin: jichangee@gmail.com
   distractionFreeMode: true #是否启用类似FB的阴影遮罩
 
 
