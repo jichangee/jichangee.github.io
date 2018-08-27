@@ -65,8 +65,8 @@ gitalk:
   clientID: 02884ac803aa950dc407                            #生成的clientID
   clientSecret: bb44d7f83924d1cf7cab3a4e930eb269269fc407    #生成的clientSecret
   repo: jichangee.github.io    #仓库名称
-  owner: jichangee@gmail.com    #github用户名
-  admin: jichangee@gmail.com
+  owner: jichangee    #github用户名
+  admin: ['jichangee']
   distractionFreeMode: true #是否启用类似FB的阴影遮罩
 
 
