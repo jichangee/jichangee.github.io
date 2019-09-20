@@ -44,7 +44,7 @@ cordova plugin add cordova-plugin-contacts
 这是调用Cordova插件必须要引入的
 
 将webpack输出目录设置到Cordova项目中，打开vueDemo - config - index.js,修改 7，8，9，10行代码，如下
-![](http://www.xuejichang.cn/web/upload/cordova.png)
+![cordova.png](https://i.loli.net/2018/09/27/5bac72f074c15.png)
 ## 开始
 然后在vueDemo - src - components 目录下创建一个contact.vue文件，contact中的代码如下（其中的3个function参考w3c）
 ```html

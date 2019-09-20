@@ -57,7 +57,7 @@ let doubled = arr.map(num => {
 ###速度
 jsPerf是一个很好的用来测试不同JavaScript方法和函数执行速度的网站。
 这是`forEach()`和`map()`的测试结果：
-![](https://www.xuejichang.cn/web/upload/1_aVOlJ0l02ymgVrQ8axIBrQ.png)
+![1_aVOlJ0l02ymgVrQ8axIBrQ.png](https://i.loli.net/2018/09/27/5bac72eed6cf1.png)
 正如你所看到的，在我的机器上，`forEach()`要比`map()`慢70%。
 你的浏览器可能会不同。你可以[试一下](https://jsperf.com/map-vs-foreach-speed-test)
 ###功能

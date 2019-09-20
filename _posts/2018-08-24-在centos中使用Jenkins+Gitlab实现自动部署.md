@@ -65,7 +65,7 @@ sudo service jenkins restart
 
 解锁成功后，会出现选择安装插件的界面
 
-![](https://www.xuejichang.cn/web/upload/chajian.png)
+![chajian.png](https://i.loli.net/2018/09/27/5bac72f28febd.png)
 
 我们选择【选择插件来安装】，默认会勾选一些插件，我们可以取消选择这些插件来安装我们需要的插件。
 
@@ -75,7 +75,7 @@ sudo service jenkins restart
 
 ### gitlab hook
 
-进入jenkins管理插件界面，搜索 【hook】，找到gitlab hook勾选安装，完成后重启jenkins。![](https://www.xuejichang.cn/web/upload/jenkins-2.png)
+进入jenkins管理插件界面，搜索 【hook】，找到gitlab hook勾选安装，完成后重启jenkins。![jenkins-2.png](https://i.loli.net/2018/09/27/5bac72f0756d2.png)
 
 ### SSH
 
@@ -85,7 +85,7 @@ sudo service jenkins restart
 
 进入Credentials - System - Add domain页面。
 
-![](https://www.xuejichang.cn/web/upload/jenkins-3.png)
+![jenkins-3.png](https://i.loli.net/2018/09/27/5bac72f2404d8.png)
 
 在Domain Name中输入`www.gitlab.com`，然后点击OK，之后在左侧菜单中点击`add credentials`。
 
@@ -95,7 +95,7 @@ Username输入git Name
 
 Private Key 选择`Enter directly`，然后把刚才生成的秘钥输入进去，点击OK
 
-![](https://www.xuejichang.cn/web/upload/jenkins-4.png)
+![jenkins-4.png](https://i.loli.net/2018/09/27/5bac740c9ee62.png)
 
 ##### 将公钥复制到gitlab中
 
