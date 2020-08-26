@@ -8,7 +8,7 @@ author:     薛纪昌 						# 作者
 catalog: true 						# 是否归档
 tags:								#标签
     - Centos
-    - Node.js
+    - NodeJs
 ---
 
 要在CentOS 7、Fedora 29、Fedora 28系统中安装Node.js 10.x LTS，请使用NodeSource方式：
