@@ -1,10 +1,10 @@
 # Site settings
-title: Kline Blog
-SEOTitle: Kline的博客 | Kline Blog
+title: Moxuy Blog
+SEOTitle: moxuy的博客 | Moxuy Blog
 header-img: img/post-bg-desk.jpg
 email: jichangee@gmail.com
-description: "Kline的个人博客，前端笔记"
-keyword: "Kline, Kline Blog, Kline的博客, xuejichang, Kline, 前端, 笔记"
+description: "moxuy的个人博客，前端笔记"
+keyword: "moxuy, Moxuy Blog, moxuy的博客, xuejichang, moxuy, 前端, 笔记"
 url: "https://jichangee.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/jichangee/jichangee.github.io.git" # you code repository

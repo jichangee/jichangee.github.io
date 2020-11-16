@@ -3,7 +3,7 @@ layout:     post   				    # 使用的布局（不需要改）
 title:      在CentOS 7/Fedora 29/Fedora 28中安装Node.js 10 LTS		  # 标题 
 # subtitle:   Hello World, Hello Blog #副标题
 date:       2020-03-02 				# 时间
-author:     Kline 						# 作者
+author:     moxuy 						# 作者
 # header-img: img/post-bg-2015.jpg 	#这篇文章标题背景图片
 catalog: true 						# 是否归档
 tags:								#标签
