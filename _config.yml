@@ -87,6 +87,7 @@ ba_track_id: c8a20147eb0299fee4bda15c0e248900
 featured-tags: false                     # 是否使用首页标签
 featured-condition-size: 1              # 相同标签数量大于这个数，才会出现在首页
 
+top-banner: false                           # 是否在首页展示顶部
 about-me: false                           # 是否在首页展示关于我
 
 # Progressive Web Apps
