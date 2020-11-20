@@ -36,3 +36,4 @@ _site
 node_modules/
 public
 db.json
+themes/
