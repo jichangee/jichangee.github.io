@@ -1818,8 +1818,8 @@ hexo-renderer-stylus@^2.0.0:
 
 hexo-server@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.npm.taobao.org/hexo-server/download/hexo-server-2.0.0.tgz#1ad92cc8a7d3528fec6ffa65ff8453f242f7983f"
-  integrity sha1-GtksyKfTUo/sb/pl/4RT8kL3mD8=
+  resolved "https://registry.yarnpkg.com/hexo-server/-/hexo-server-2.0.0.tgz#1ad92cc8a7d3528fec6ffa65ff8453f242f7983f"
+  integrity sha512-GnxCU0hjepjmqMENcKOKxpzOajb9YrjQczWsZPXU25l5Ze+M9KJLSVljIRFR+ikDRIPDtXaUY2WgYrWPbNEGfg==
   dependencies:
     bluebird "^3.5.5"
     chalk "^4.0.0"
