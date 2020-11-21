@@ -19,7 +19,7 @@ https请求http的接口又会遇到问题，所以只能找解决方法。
 
 log segmentation fault. google和百度了一圈，都没发现解决方法。
 
-最后用Nginx的反向代理猥琐解决了该问题。nginx的安装可以去我的另一篇博客中查看[CentOS环境部署](https://www.xuejichang.cn/blogger.html?id=1)
+最后用Nginx的反向代理猥琐解决了该问题。nginx的安装可以去我的另一篇博客中查看[CentOS环境部署](https://xuejichang.cn/2017/04/03/CentOS%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/)
 ## 反向代理配置
 打开 /etc/nginx/nginx.conf 文件，在监听443端口的服务中加入如下代码
 ```
