@@ -100,6 +100,13 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: lights
 
+# hexo-admin authentification
+admin:
+  username: moxuy
+  password_hash: $2a$10$TGs06lAtkoWCD7RtE4mA4.0AnURT98CkaS86DLv/RGwI.xDyFuKoG
+  secret: jichangee
+  deployCommand: './hexo-deploy.sh'
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
