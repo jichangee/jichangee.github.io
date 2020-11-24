@@ -4,9 +4,9 @@
 
 # Site
 title: Moxuy
-subtitle: ''
-description: ''
-keywords:
+subtitle: moxuy
+description: 一个什么都写的小博客
+keywords: 前端技术,xuejichang,前端博客,生活杂谈
 author: Moxuy
 language: zh-CN
 timezone: ''
@@ -98,7 +98,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: lights
+theme: next
 
 # hexo-admin authentification
 admin:
