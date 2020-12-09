@@ -21,6 +21,12 @@ pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
   trailing_html: true # Set to false to remove trailing '.html' from permalinks
 
+sitemap:
+  path: sitemap.xml
+  template: ./stemap_template.xml
+  rel: false
+  tags: true
+  categories: true
 # Directory
 source_dir: source
 public_dir: public
@@ -98,7 +104,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next
+theme: lights
 
 # hexo-admin authentification
 admin:
