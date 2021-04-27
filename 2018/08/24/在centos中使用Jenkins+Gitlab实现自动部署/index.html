@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xuejichang.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="经过一天的摸索与尝试，参考了网上大部分的教程，终于把基本功能搞定了。在Google搜索了很多关键字，都没有找到一篇完整的面向初学者的教程（可能是本人的疏忽），所以借此来记录一下自动部署的流程与踩到的坑。 安装因为Jenkins使用Java编写，所以需要安装java环境 1sudo yum install java  安装Jenkins之前要先添加Jenkins库 1wget -O &#x2F;etc&#x2F;yum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在centos中使用Jenkins+Gitlab实现自动部署">
+<meta property="og:url" content="https://xuejichang.cn/2018/08/24/%E5%9C%A8centos%E4%B8%AD%E4%BD%BF%E7%94%A8Jenkins+Gitlab%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Moxuy">
+<meta property="og:description" content="经过一天的摸索与尝试，参考了网上大部分的教程，终于把基本功能搞定了。在Google搜索了很多关键字，都没有找到一篇完整的面向初学者的教程（可能是本人的疏忽），所以借此来记录一下自动部署的流程与踩到的坑。 安装因为Jenkins使用Java编写，所以需要安装java环境 1sudo yum install java  安装Jenkins之前要先添加Jenkins库 1wget -O &#x2F;etc&#x2F;yum">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2018/09/27/5bac72f28febd.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/27/5bac72f0756d2.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/27/5bac72f2404d8.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/27/5bac740c9ee62.png">
+<meta property="article:published_time" content="2018-08-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-04-27T06:26:43.438Z">
+<meta property="article:author" content="Moxuy">
+<meta property="article:tag" content="centos">
+<meta property="article:tag" content="jenkins">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2018/09/27/5bac72f28febd.png">
+
+<link rel="canonical" href="https://xuejichang.cn/2018/08/24/%E5%9C%A8centos%E4%B8%AD%E4%BD%BF%E7%94%A8Jenkins+Gitlab%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>在centos中使用Jenkins+Gitlab实现自动部署 | Moxuy</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Moxuy</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">moxuy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xuejichang.cn/2018/08/24/%E5%9C%A8centos%E4%B8%AD%E4%BD%BF%E7%94%A8Jenkins+Gitlab%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Moxuy">
+      <meta itemprop="description" content="一个什么都写的小博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Moxuy">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在centos中使用Jenkins+Gitlab实现自动部署
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-24 00:00 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-24T00:00:00+08:00">2018-08-24 00:00</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-27 14:26 14:26:43" itemprop="dateModified" datetime="2021-04-27T14:26:43+08:00">2021-04-27 14:26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>经过一天的摸索与尝试，参考了网上大部分的教程，终于把基本功能搞定了。在Google搜索了很多关键字，都没有找到一篇完整的面向初学者的教程（可能是本人的疏忽），所以借此来记录一下自动部署的流程与踩到的坑。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>因为Jenkins使用Java编写，所以需要安装java环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install java</span><br></pre></td></tr></table></figure>
+
+<p>安装Jenkins之前要先添加Jenkins库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O /etc/yum.repos.d/jenkins.repo http://jenkins-ci.org/redhat/jenkins.repo</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key</span><br></pre></td></tr></table></figure>
+
+<p>然后再安装Jenkins</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install jenkins</span><br></pre></td></tr></table></figure>
+
+<p>安装完成之后启动Jenkins</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service jenkins start</span><br></pre></td></tr></table></figure>
+
+<p>Jenkins默认会在8080端口运行，如果8080端口被占用，可以修改Jenkins的配置文件</p>
+<blockquote>
+<p>/etc/sysconfig/jenkins</p>
+</blockquote>
+<p>修改 <code>JENKINS_PORT</code> 的值，然后重启jenkins即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service jenkins restart</span><br></pre></td></tr></table></figure>
+
+<p><em>注意</em></p>
+<p>阿里云的服务器可能出现jenkins启动成功后无法访问的情况，是因为阿里云对服务器的部分端口进行了限制导致的。建议将jenkins端口修改为 <code>10000 - 10050</code> 之间的端口，比如 <code>10001</code>。</p>
+<h3 id="启动配置"><a href="#启动配置" class="headerlink" title="启动配置"></a>启动配置</h3><p>浏览器中访问IP:PORT，会出现“解锁”jenkins的界面，进入页面中给出的路径，找到密码，输入到页面中的输入框中，解锁jenkins。</p>
+<p>解锁成功后，会出现选择安装插件的界面</p>
+<p><img src="https://i.loli.net/2018/09/27/5bac72f28febd.png" alt="chajian.png"></p>
+<p>我们选择【选择插件来安装】，默认会勾选一些插件，我们可以取消选择这些插件来安装我们需要的插件。</p>
+<p>搜索【git】并勾选【git】和【gitlab】，然后点击安装。</p>
+<p>安装后会跳转到创建用户界面，填写信息并保存完成。</p>
+<h3 id="gitlab-hook"><a href="#gitlab-hook" class="headerlink" title="gitlab hook"></a>gitlab hook</h3><p>进入jenkins管理插件界面，搜索 【hook】，找到gitlab hook勾选安装，完成后重启jenkins。<img src="https://i.loli.net/2018/09/27/5bac72f0756d2.png" alt="jenkins-2.png"></p>
+<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p>在终端输入 <code>ssh-keygen -t rsa -C &#39;Your email&#39;</code> 生成秘钥和公钥。</p>
+<h5 id="将秘钥复制到jenkins中"><a href="#将秘钥复制到jenkins中" class="headerlink" title="将秘钥复制到jenkins中"></a>将秘钥复制到jenkins中</h5><p>进入Credentials - System - Add domain页面。</p>
+<p><img src="https://i.loli.net/2018/09/27/5bac72f2404d8.png" alt="jenkins-3.png"></p>
+<p>在Domain Name中输入<code>www.gitlab.com</code>，然后点击OK，之后在左侧菜单中点击<code>add credentials</code>。</p>
+<p>Kind选择<code>SSH Username with private key</code></p>
+<p>Username输入git Name</p>
+<p>Private Key 选择<code>Enter directly</code>，然后把刚才生成的秘钥输入进去，点击OK</p>
+<p><img src="https://i.loli.net/2018/09/27/5bac740c9ee62.png" alt="jenkins-4.png"></p>
+<h5 id="将公钥复制到gitlab中"><a href="#将公钥复制到gitlab中" class="headerlink" title="将公钥复制到gitlab中"></a>将公钥复制到gitlab中</h5><p>User - setting - SSH Keys</p>
+<h3 id="自动构建"><a href="#自动构建" class="headerlink" title="自动构建"></a>自动构建</h3><p>在左侧菜单中选择【新建任务】，输入任务名，选择【构建一个自由风格的软件项目】，点击确认。</p>
+<p>在【源码管理】栏目，选择【git】，Repository URL输入gitlab项目地址，Credentials选择刚才新建的Credentials。</p>
+<p>在【构建触发器】栏目，勾选【Build when a change is pushed to GitLab】，点击【高级】之后，点击【generate】按钮生成token。记录【GitLab webhook URL】和【Secret token 】的值。</p>
+<p>在【构建】栏目，选择【增加构建步骤】- 【执行shell】，在【命令】中输入shell构建代码。</p>
+<p>点击保存。</p>
+<h3 id="构建shell"><a href="#构建shell" class="headerlink" title="构建shell"></a>构建shell</h3><p>如果顺利的话，向gitlab提交代码，会触发jenkins的构建代码。在触发构建代码之前，jenkins会先clone项目代码，按照默认配置，代码会clone在<code>/var/lib/jenkins/workspace</code>。</p>
+<p>我使用的web服务器是 Nginx，web根目录在<code>/usr/share/nginx/html</code>。</p>
+<p>我的部署shell代码比较简单粗暴（不会~）。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入jenkins工作目录</span></span><br><span class="line">cd /var/lib/jenkins/workspace</span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除web服务目录文件</span></span><br><span class="line">rm -r -f /usr/share/nginx/html/jenkins/workspace/gitlab-test</span><br><span class="line"><span class="meta">#</span><span class="bash"> 拷贝jenkins工作目录中的代码到web服务目录</span></span><br><span class="line">cp -R gitlab-test /usr/share/nginx/html/jenkins/workspace</span><br></pre></td></tr></table></figure>
+
+<h3 id="webhooks"><a href="#webhooks" class="headerlink" title="webhooks"></a>webhooks</h3><p>还有关键的一步，就是设置gitlab的webhooks。</p>
+<p>进入gitlab项目 - setting - Integrations</p>
+<p>将刚才配置构建时保存的<code>GitLab webhook URL</code>和<code>Secret Token</code>填入保存，然后点击Test，测试。</p>
+<p>如果成功，页面会出现提示 <code>HTTP 200</code></p>
+<p>如果失败，需要到jenkins管理界面 - 系统管理 - 全局安全设置 - CSRF Protection中，取消勾选【防止跨站点请求伪造】即可。</p>
+<h3 id="获取root权限"><a href="#获取root权限" class="headerlink" title="获取root权限"></a>获取root权限</h3><p>为jenkins获取root权限</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpasswd -a root jenkins</span><br></pre></td></tr></table></figure>
+<p>修改<code>/etc/sysconfig/jenkins</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">JENKINS_USER&#x3D;root</span><br><span class="line">JENKINS_GROUP&#x3D;root</span><br></pre></td></tr></table></figure>
+<p>重启jenkins</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service jenkins restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="npm-command-not-found"><a href="#npm-command-not-found" class="headerlink" title="npm command not found"></a>npm command not found</h3><p>再构建中执行shell时，会提示<code>npm command not found</code><br>可以在插件管理中安装<code>nodejs</code>插件<br>系统管理 - 全局工具配置 - nodejs中配置保存<br>然后在项目构建配置中勾选node</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/centos/" rel="tag"># centos</a>
+              <a href="/tags/jenkins/" rel="tag"># jenkins</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/08/24/%E5%9C%A8%E5%BE%AE%E4%BF%A1%E5%86%85%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E7%A7%BB%E5%8A%A8%E5%9B%BE%E7%89%87%E5%8D%A1%E9%A1%BF/" rel="prev" title="在微信内置浏览器中移动图片卡顿">
+      <i class="fa fa-chevron-left"></i> 在微信内置浏览器中移动图片卡顿
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/08/24/gulp%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" rel="next" title="gulp入门笔记">
+      gulp入门笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">启动配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab-hook"><span class="nav-number">3.</span> <span class="nav-text">gitlab hook</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH"><span class="nav-number">4.</span> <span class="nav-text">SSH</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B0%86%E7%A7%98%E9%92%A5%E5%A4%8D%E5%88%B6%E5%88%B0jenkins%E4%B8%AD"><span class="nav-number">4.0.1.</span> <span class="nav-text">将秘钥复制到jenkins中</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B0%86%E5%85%AC%E9%92%A5%E5%A4%8D%E5%88%B6%E5%88%B0gitlab%E4%B8%AD"><span class="nav-number">4.0.2.</span> <span class="nav-text">将公钥复制到gitlab中</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA"><span class="nav-number">5.</span> <span class="nav-text">自动构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAshell"><span class="nav-number">6.</span> <span class="nav-text">构建shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webhooks"><span class="nav-number">7.</span> <span class="nav-text">webhooks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96root%E6%9D%83%E9%99%90"><span class="nav-number">8.</span> <span class="nav-text">获取root权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#npm-command-not-found"><span class="nav-number">9.</span> <span class="nav-text">npm command not found</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Moxuy</p>
+  <div class="site-description" itemprop="description">一个什么都写的小博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Moxuy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

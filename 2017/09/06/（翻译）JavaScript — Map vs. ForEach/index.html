@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xuejichang.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Array.prototype.map()如果你使用了一段时间的JavaScript，你可能会遇到两个比较相似的数组方法：Array.prototype.map() 和 Array.prototype.forEach()。 所以，有什么不同呢？ ####Map&amp;ForEach的定义首先让我们看一下在MDN上的定义：  forEach() —— 给每个数组元素执行一次提供的函数。 map()">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（翻译）JavaScript — Map vs. ForEach">
+<meta property="og:url" content="https://xuejichang.cn/2017/09/06/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89JavaScript%E2%80%8A%E2%80%94%E2%80%8AMap%20vs.%20ForEach/index.html">
+<meta property="og:site_name" content="Moxuy">
+<meta property="og:description" content="Array.prototype.map()如果你使用了一段时间的JavaScript，你可能会遇到两个比较相似的数组方法：Array.prototype.map() 和 Array.prototype.forEach()。 所以，有什么不同呢？ ####Map&amp;ForEach的定义首先让我们看一下在MDN上的定义：  forEach() —— 给每个数组元素执行一次提供的函数。 map()">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2018/09/27/5bac72eed6cf1.png">
+<meta property="article:published_time" content="2017-09-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-04-27T06:26:43.442Z">
+<meta property="article:author" content="Moxuy">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2018/09/27/5bac72eed6cf1.png">
+
+<link rel="canonical" href="https://xuejichang.cn/2017/09/06/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89JavaScript%E2%80%8A%E2%80%94%E2%80%8AMap%20vs.%20ForEach/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>（翻译）JavaScript — Map vs. ForEach | Moxuy</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Moxuy</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">moxuy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xuejichang.cn/2017/09/06/%EF%BC%88%E7%BF%BB%E8%AF%91%EF%BC%89JavaScript%E2%80%8A%E2%80%94%E2%80%8AMap%20vs.%20ForEach/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Moxuy">
+      <meta itemprop="description" content="一个什么都写的小博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Moxuy">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          （翻译）JavaScript — Map vs. ForEach
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-06 00:00 00:00:00" itemprop="dateCreated datePublished" datetime="2017-09-06T00:00:00+08:00">2017-09-06 00:00</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-27 14:26 14:26:43" itemprop="dateModified" datetime="2021-04-27T14:26:43+08:00">2021-04-27 14:26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Array.prototype.map()如果你使用了一段时间的JavaScript，你可能会遇到两个比较相似的数组方法：<code>Array.prototype.map()</code> 和 <code>Array.prototype.forEach()</code>。</p>
+<p>所以，有什么不同呢？</p>
+<p>####Map&amp;ForEach的定义<br>首先让我们看一下在MDN上的定义：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach">forEach()</a> —— 给每个数组元素执行一次提供的函数。</li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map">map()</a> —— 创建一个新数组，再给每一个新数组元素执行一次提供的函数。</li>
+</ul>
+<p>这到底意味着什么？</p>
+<p><code>forEach()</code>方法实际上不会返回任何东西(undefined)。它只是简单的在每个数组元素上执行你提供的函数。这个回调函数是被允许改变原有数组的。</p>
+<p><code>map()</code>方法也是在每个数组元素上执行你提供的函数。不同的是，<code>map()</code>会根据回调函数的返回值来返回一个相同大小的新数组。</p>
+<h4 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h4><p>思考以下数组。如果我们想把每个数组元素乘以二，那<code>map()</code>或者<code>forEach()</code>都可以使用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br></pre></td></tr></table></figure>
+
+<p><strong>ForEach：</strong><br>你将不会从forEach中得到一个返回值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr.forEach(<span class="function">(<span class="params">num, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> arr[index] = num * <span class="number">2</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>结果：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// arr = [2, 4, 6, 8, 10]</span></span><br></pre></td></tr></table></figure>
+<p><strong>Map:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let doubled &#x3D; arr.map(num &#x3D;&gt; &#123;</span><br><span class="line">    return num * 2;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; doubled &#x3D; [2, 4, 6, 8, 10]</span><br></pre></td></tr></table></figure>
+
+<p>###速度<br>jsPerf是一个很好的用来测试不同JavaScript方法和函数执行速度的网站。<br>这是<code>forEach()</code>和<code>map()</code>的测试结果：<br><img src="https://i.loli.net/2018/09/27/5bac72eed6cf1.png" alt="1_aVOlJ0l02ymgVrQ8axIBrQ.png"><br>正如你所看到的，在我的机器上，<code>forEach()</code>要比<code>map()</code>慢70%。<br>你的浏览器可能会不同。你可以<a target="_blank" rel="noopener" href="https://jsperf.com/map-vs-foreach-speed-test">试一下</a><br>###功能<br>如果你喜欢函数式编程，那使用<code>map()</code>可能会更好。<br>这是因为<code>forEach()</code>会影响和改变我们的源数组，然而<code>map()</code>会返回一个全新的数组——从而保证源数组不变。<br>###哪一个更好？<br>这取决于你想实现什么功能。<br>当你不会改变数组中的数据时，<code>forEach()</code>可能会更好，只是想对数组做些什么，比如存入到数据库或者日志中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let arr &#x3D; [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];</span><br><span class="line">arr.forEach((letter) &#x3D;&gt; &#123;</span><br><span class="line">    console.log(letter);</span><br><span class="line">&#125;);</span><br><span class="line">&#x2F;&#x2F; a</span><br><span class="line">&#x2F;&#x2F; b</span><br><span class="line">&#x2F;&#x2F; c</span><br><span class="line">&#x2F;&#x2F; d</span><br></pre></td></tr></table></figure>
+<p>当要改变数据时，<code>map()</code>可能会更好。不仅它更快，而且还会返回新的数组。这意味着我们能做很酷的事情，像链接其他方法（<code>map()</code>, <code>filter()</code>, <code>reduce()</code>, 等等）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let arr &#x3D; [1, 2, 3, 4, 5];</span><br><span class="line">let arr2 &#x3D; arr.map(num &#x3D;&gt; num * 2).filter(num &#x3D;&gt; num &gt; 5);</span><br><span class="line">&#x2F;&#x2F; arr2 &#x3D; [6, 8, 10]</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，我们首先做的是将数组中每个元素乘以2。在这之后，我们过滤了这个数组，就保存了比5大的元素。最终剩下了<code>[6, 8, 10]</code>这个数组<code>arr2</code>。</p>
+<p>原文：<a target="_blank" rel="noopener" href="https://codeburst.io/javascript-map-vs-foreach-f38111822c0f">https://codeburst.io/javascript-map-vs-foreach-f38111822c0f</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"># javascript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/04/03/CentOS%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/" rel="prev" title="CentOS环境部署">
+      <i class="fa fa-chevron-left"></i> CentOS环境部署
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/08/24/%E9%97%AD%E5%8C%85%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="闭包学习笔记">
+      闭包学习笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">代码示例</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Moxuy</p>
+  <div class="site-description" itemprop="description">一个什么都写的小博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Moxuy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
